@@ -1,0 +1,77 @@
+<script id="tmpl-editOdds" type="text/x-handlebars-template" data-tmpl="tmpl-editOdds">
+    <form id="editOdds" onsubmit="return admin.updateScore()">
+        <fieldset id="editOdds-content">
+            <legend>Update Scores</legend>
+            <ul class="vbox">
+                {{#if labels}}
+                <li>
+                    {{> part-editScores-labels}}
+                </li>
+                {{/if}}
+                {{#each teams}}
+                <li>
+                    {{> part-editScores-teams}}
+                </li>
+                {{/each}}
+                {{#if odds}}
+                <li>
+                    {{> part-editScores-odds}}
+                </li>
+                {{/if}}
+            </ul>
+            
+            <button id="editScores-upload" type="submit">Upload</button>
+        </fieldset>
+    </form>
+</script>
+<script id="part-editScores-labels" type="text/x-handlebars-template" data-part="part-editScores-labels">
+    <ul class="hbox">
+        <li>
+            <input type="text"
+                    value="{{gameId}}"
+                    id="editScores-gameId"
+                    disabled/>
+        </li>
+        {{#each labels}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+</script>
+<script id="part-editScores-odds" type="text/x-handlebars-template" data-part="part-editScores-odds">
+    <ul class="hbox">
+        {{#each odds}}
+        <li>
+            <ul class="vbox">
+                <li>{{this.label}}</li>
+                <li>
+                    <input type="number" 
+                            {{#if max}}max="{{max}}"{{/if}}
+                            {{#if min}}min="{{min}}"{{/if}}
+                            step="0.5"
+                            id="editScores-{{#if id}}{{id}}{{else}}{{label}}{{/if}}"
+                            value="{{#if value}}{{value}}{{else}}{{#if min}}{{min}}{{else}}0{{/if}}{{/if}}"/>
+                </li>
+            </ul>
+        </li>
+        {{/each}}
+    </ul>
+</script>
+<script id="part-editScores-teams" type="text/x-handlebars-template" data-part="part-editScores-teams">
+    <ul class="hbox">
+        <li>{{label}}</li>
+        <li>
+            <select id="editScores-{{label}}">
+                {{#each teams}}
+                <option {{#ifeq ../name this}}selected{{/ifeq}}>{{this}}</option>
+                {{/each}}
+            </select>
+        </li>
+        <li>
+            <input id="editScores-score{{label}}" type="number" min="0" step="1" 
+                    value="{{#if score}}{{score}}{{else}}0{{/if}}" />
+        </li>
+        <li>
+            <input id="editScores-favorite{{label}}" type="radio" name="editScores-favorite" value="{{label}}" {{#if favorite}}checked{{/if}} required/>
+        </li>
+    </ul>
+</script>

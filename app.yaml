@@ -1,0 +1,30 @@
+application: matsumoto26sunday
+version: 5
+runtime: python27
+api_version: 1
+threadsafe: false
+
+handlers:
+- url: /spreads
+  script: spreads.py
+- url: /scores
+  script: scores.py
+- url: /helper/tally
+  script: tally.py
+  login: admin
+- url: /_ah/mail/.+
+  script: mail.py
+  login: admin
+- url: /favicon\.ico
+  static_files: static/images/favicon.ico
+  upload: static/images/favicon\.ico
+- url: /help-upload/scripts/helper.js
+  static_files: views/scripts/helper.js
+  upload: views/scripts/helper.js
+
+libraries:
+- name: lxml
+  version: "2.3"
+
+inbound_services:
+- mail

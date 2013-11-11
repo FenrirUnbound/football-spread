@@ -1,0 +1,57 @@
+<script id="tmpl-scorebox" type="text/x-handlebars-template" data-tmpl="tmpl-scorebox">
+    {{#each scores}}
+    <article {{#if gameId}}id="{{gameId}}"{{/if}} class="scoreboard">
+        <section class="scorebox {{#if isWinning}}green{{else}}{{#if isLosing}}red{{else}}white{{/if}}{{/if}}" id="scorebox">
+            {{> part-scores awayTeam}}
+            {{> part-scores homeTeam}}
+            <ul class="hbox">
+                {{#if gameClock}}
+                    <li></li> <!-- Hack 25% formatting -->
+                    <li>QT {{gameStatus}}</li>
+                    <li>{{gameClock}}</li>
+                    <li></li> <!-- Hack 25% formatting -->
+                {{else}}
+                    {{#if gameStatus}}
+                    <li>{{gameStatus}}</li>
+                    {{else}}
+                        <li>{{gameStartDay}} {{gameStartTime}}pm EST</li>
+                    {{/if}}
+                {{/if}}
+            </ul>
+            {{#if line}}
+            <ul class="hbox spreadLine" id="expandSpreadDetails">
+                <li>{{favoriteShort}} {{line}}</li>
+            </ul>
+            {{/if}}
+        </section>
+        {{#if line}}
+        <section class="spreadDetails drawerClose" id="spreadDetails">
+            <ul class="hbox" id="teamChoice">
+                <li>Picked Team</li>
+                <li class="{{#if isWinning}}green{{else}}{{#if isLosing}}red{{else}}white{{/if}}{{/if}}">{{pickedTeam}}</li>
+            </ul>
+            {{#if margin}}
+            <ul class="hbox" id="margin">
+                <li>{{#if isOver}}<strong>{{/if}}Over{{#if isOver}}</strong>{{/if}}/{{#if isUnder}}<strong>{{/if}}Under{{#if isUnder}}</strong>{{/if}}</li>
+                <li {{#if isOver}}class="{{#if actualOver}}green{{else}}red{{/if}}"{{else}}{{#if isUnder}}class="{{#if actualUnder}}green{{else}}red{{/if}}"{{/if}}{{/if}}>
+                    {{margin}}
+                </li>
+            </ul>
+            {{/if}}
+            {{#if totalScore}}
+            <ul class="hbox" id="totalScore">
+                <li>Total Score</li>
+                <li {{#if totalGood}}class="green"{{else}}{{#if totalBad}}class="red"{{/if}}{{/if}}>{{totalScore}}</li>
+            </ul>
+            {{/if}}
+        </section>
+        {{/if}}
+    </article>
+    {{/each}}
+</script>
+<script id="part-scores" type="text/x-handlebars-template" data-part="part-scores">
+    <ul class="hbox">
+        <li>{{name}}</li>
+        <li>{{score}}</li>
+    </ul>
+</script>

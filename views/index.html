@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>NFL Spread</title>
+        <link rel="stylesheet" type="text/css" href="./index.css" media="screen" />
+        <link rel="icon" type="image/ico" href="./favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+    <body>    
+        <section class="selectionSpread" id="sectionSpread">
+            <!-- Player spread selection -->
+            <section class="spreadForm">
+                <form>
+                    <fieldset>
+                        <ul>
+                            <li>
+                                <label class="selectTally" id="selectTally">0</label>
+                                <label class="selectTally">Pts</label>
+                            </li>
+                            <li>
+                                <select id="selectMenu"></select>
+                            </li>
+                            <li>
+                                <label id="selectButton" class="selectButton">Select</label>
+                            </li>
+                        </ul>
+                    </fieldset>
+                </form>
+            </section>
+
+            <!-- Array of game scores -->
+            <section id="scoreboard">
+            </section>
+        </section>
+  
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+        <script type="text/javascript" src="./scripts/handlebars.js"></script>
+        <script type="text/javascript" src="./scripts/main.js"></script>
+        <script type="text/javascript" src="./scripts/spread.js"></script>
+
+        <script id="tmpl-listoptions" type="text/x-handlebars-template" data-tmpl="tmpl-listoptions">
+            {{#each players}}
+            <option value="{{value}}">{{name}}</option>
+            {{/each}}
+        </script>
+  </body>
+</html>

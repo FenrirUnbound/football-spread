@@ -1,0 +1,5 @@
+cron:
+- description: Tuesday morning spread tally
+  url: /helper/tally
+  schedule: every tuesday 03:00
+  timezone: America/New_York
