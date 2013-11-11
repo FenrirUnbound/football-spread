@@ -1,10 +1,13 @@
 # .coveragerc to control coverage.py
 [run]
 branch = True
-omit = *google*, *encodings*, *threading*, myenv.lib.python2*
-include = .
+omit = *google*, *encodings*, *threading*, *nose*
 
 [report]
+ignore_errors = True
+show_missing = False
+omit = *google*, *encodings*, *threading*, *nose*
+
 # Regexes for lines to exclude from consideration
 exclude_lines =
     # Have to re-enable the standard pragma
@@ -21,7 +24,3 @@ exclude_lines =
     # Don't complain if non-runnable code isn't run:
     if 0:
     if __name__ == .__main__.:
-
-ignore_errors = True
-show_missing = False
-omit = *myenv*
