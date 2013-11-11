@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>NFL Spread - Admin</title>
+        <link rel="stylesheet" type="text/css" href="./admin.css" media="screen" />
+        <link rel="icon" type="image/ico" href="./favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+    <body>
+        <form id="odds">
+            <fieldset id="oddsHeader">
+                <legend>Game Odds</legend>
+                <ul class="hbox">
+                    <li>
+                        <select id="oddsHeader_selectWeek">
+                            <option value="">Current Week</option>
+                        </select>
+                    </li>
+                    <li>
+                        <button id="oddsHeader_update">Fetch</button>
+                    </li>
+                </ul>
+            </fieldset>
+            <fieldset id="oddsScoreboard">
+            </fieldset>
+        </form>
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+        <script type="text/javascript" src="./scripts/handlebars.js"></script>
+        <script type="text/javascript" src="./scripts/admin.js"></script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            admin.init();
+        });
+        </script>
+    </body>
+</html>

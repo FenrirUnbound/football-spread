@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>NFL Spread - Admin</title>
+        <link rel="stylesheet" type="text/css" href="./spread.css" media="screen" />
+        <link rel="icon" type="image/ico" href="./favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+    <body>
+        <section>
+            <ul class="vbox">
+                <li>
+                    <ul class="hbox">
+                        <li><label>Season</label></li>
+                        <li><label>Week</label></li>
+                        <li><label>Starting GameID</label></li>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="hbox">
+                        <li>
+                            <select id="year">
+                                <option value="2012">2012</option>
+                                <option value="2013" selected>2013</option>
+                            </select>
+                        </li>
+                        <li>
+                            <select id="week">
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </li>
+                        <li><input type="text" value="99999" id="gameId" />
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <textarea id="spreadData" rows="50" cols="100">
+        </textarea>
+
+        <button id="pushUp">Submit</button>
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+        <script type="text/javascript" src="./scripts/helper.js"></script>
+    </body>
+</html>

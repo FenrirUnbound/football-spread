@@ -1,0 +1,93 @@
+/*
+  fffbe0
+  eee9d3
+  d3cabc
+  440563
+  522694
+ */
+
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td {
+    border: 0;
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+body {
+    background: #522694;
+    color: #eee9d3;
+    font-family: Helvetica Neue, Helvetica, Arial, Liberation Sans, FreeSans, sans-serif;
+    line-height: 1.5em;
+}
+
+button {
+    display: block;
+    margin: 0px auto;
+    width: 50%;
+}
+
+fieldset {
+    padding: 0.5em;
+}
+
+form {
+    border: 3px solid #d3cabc;
+    border-radius: 11px;
+    margin: 2.25%;
+    width: 95.5%;
+}
+
+input {
+    width: 85%;
+}
+
+ul {
+    padding: 0 0 0.5em 0;
+    width: 100%;
+}
+
+ul.hbox {
+    display: box;
+    display: -moz-box;
+    display: -webkit-box;
+    list-style: none;
+    box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    -webkit-box-orient: horizontal;
+    width: 100%;
+}
+
+ul.hbox li {
+    box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-box-flex: 1;
+    text-align: center;
+    width: 100%;
+}
+
+ul.vbox {
+    display: box;
+    display: -moz-box;
+    display: -webkit-box;
+    list-style: none;
+    box-orient: vertical;
+    -moz-box-orient: vertical;
+    -webkit-box-orient: vertical;
+    width: 100%;
+}
+
+ul.vbox li {
+    box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-box-flex: 1;
+    text-align: center;
+    width: 100%;
+}

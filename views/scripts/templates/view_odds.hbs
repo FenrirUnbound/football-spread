@@ -1,0 +1,28 @@
+<script id="tmpl-oddsScoreboard" type="text/x-handlebars-template" data-tmpl="tmpl-oddsScoreboard">
+    <ul class="vbox">
+        <li>
+            <ul class="hbox">
+                <li>Away Team</li>
+                <li>Home Team</li>
+                <li>Favorite</li>
+                <li>Spread</li>
+                <li>Over/Under</li>
+                <li><!-- Hack for spacing --></li>
+            </ul>
+        </li>
+        {{#each scores}}
+        <li>
+            <ul class="hbox">
+                <li>{{awayName}}</li>
+                <li>{{homeName}}</li>
+                <li>{{favoriteName}}</li>
+                <li>{{spreadOdds}}</li>
+                <li>{{spreadMargin}}</li>
+                <li>
+                    <button id="update_{{gameId}}" value="{{gameId}}">Update</button>
+                </li>
+            </ul>
+        </li>
+        {{/each}}
+    </ul>
+</script>
