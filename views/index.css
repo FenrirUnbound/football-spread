@@ -14,8 +14,8 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 }
 
 body {
-    background: #369;
-    color: #036;
+    background: #979CA0;
+    color: #fff;
     font-family: Helvetica Neue, Helvetica, Arial, Liberation Sans, FreeSans, sans-serif;
     line-height: 1.5em;
 }
@@ -42,13 +42,13 @@ div.loadingProgressBar {
 label.selectButton {
     border: 3px solid #fff;
     border-radius: 20px;
-    color: #fc6;
+    color: #f00;
     padding: 1.5% 25% 1.5% 25%;
     width: 100%;
 }
 
 label.selectTally {
-    color: #fc6;
+    color: #000;
     font-size: 1.5em;
     margin: 0em 0.25em 1.5em 0em;
     padding: 0em;
@@ -60,7 +60,7 @@ li span {
 }
 
 section.scorebox {
-    border: 3px solid #fc6;
+    border: 3px solid #000;
     border-radius: 11px;
     padding: 1.125%;
     width: 100%;
@@ -113,8 +113,8 @@ section.spreadDetails {
 }
 
 section.spreadForm {
-    background: #036; 
-    border: 3px solid #fff;
+    background: #176091; 
+    border: 3px solid #000;
     border-radius: 11px;
     margin: 2.25%;
     padding: 5%;
@@ -176,6 +176,10 @@ ul.spreadLine {
 
 .white {
     background: #fff;
+}
+
+.yellowcreme {
+    background: #DAD2B1;
 }
 
 /* Media Query for screen size */

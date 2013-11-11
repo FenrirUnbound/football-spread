@@ -1,7 +1,7 @@
 <script id="tmpl-scorebox" type="text/x-handlebars-template" data-tmpl="tmpl-scorebox">
     {{#each scores}}
-    <article {{#if gameId}}id="{{gameId}}"{{/if}} class="scoreboard">
-        <section class="scorebox {{#if isWinning}}green{{else}}{{#if isLosing}}red{{else}}white{{/if}}{{/if}}" id="scorebox">
+    <article class="scoreboard">
+        <section class="scorebox yellowcreme" id="scorebox">
             {{> part-scores awayTeam}}
             {{> part-scores homeTeam}}
             <ul class="hbox">
@@ -28,20 +28,18 @@
         <section class="spreadDetails drawerClose" id="spreadDetails">
             <ul class="hbox" id="teamChoice">
                 <li>Picked Team</li>
-                <li class="{{#if isWinning}}green{{else}}{{#if isLosing}}red{{else}}white{{/if}}{{/if}}">{{pickedTeam}}</li>
+                <li>{{pickedTeam}}</li>
             </ul>
             {{#if margin}}
             <ul class="hbox" id="margin">
-                <li>{{#if isOver}}<strong>{{/if}}Over{{#if isOver}}</strong>{{/if}}/{{#if isUnder}}<strong>{{/if}}Under{{#if isUnder}}</strong>{{/if}}</li>
-                <li {{#if isOver}}class="{{#if actualOver}}green{{else}}red{{/if}}"{{else}}{{#if isUnder}}class="{{#if actualUnder}}green{{else}}red{{/if}}"{{/if}}{{/if}}>
-                    {{margin}}
-                </li>
+                <li>Over/Under</li>
+                <li>{{margin}}</li>
             </ul>
             {{/if}}
             {{#if totalScore}}
             <ul class="hbox" id="totalScore">
                 <li>Total Score</li>
-                <li {{#if totalGood}}class="green"{{else}}{{#if totalBad}}class="red"{{/if}}{{/if}}>{{totalScore}}</li>
+                <li>{{totalScore}}</li>
             </ul>
             {{/if}}
         </section>
