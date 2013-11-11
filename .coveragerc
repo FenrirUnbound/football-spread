@@ -1,7 +1,8 @@
 # .coveragerc to control coverage.py
 [run]
 branch = True
-omit = *google*, *encodings*, *threading*
+omit = *google*, *encodings*, *threading*, *myenv*
+include = .
 
 [report]
 # Regexes for lines to exclude from consideration
@@ -23,3 +24,4 @@ exclude_lines =
 
 ignore_errors = True
 show_missing = False
+omit = *myenv*
