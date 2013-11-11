@@ -1,2 +1,2 @@
 
-[![Build Status](https://travis-ci.org/FenrirUnbound/football-spread.png?branch=feature/travis-ci)](https://travis-ci.org/FenrirUnbound/football-spread)
+[![Build Status](https://travis-ci.org/FenrirUnbound/football-spread.png?branch=master)](https://travis-ci.org/FenrirUnbound/football-spread)
