@@ -6,6 +6,8 @@ except ImportError: import json
 import unittest
 import webapp2
 
+import main
+
 from google.appengine.api import memcache
 from google.appengine.ext import testbed
 
@@ -14,9 +16,6 @@ from lib.constants import HTTP_CODE as http_code
 from lib.constants import NFL as nfl
 
 from models.spread import SpreadModel
-
-from spreads import app
-from spreads import MainPage
 
 from test_lib.datablob_factory import DataBlobFactory
 from test_lib.testdata_factory import TestDataFactory
@@ -28,7 +27,7 @@ class TestApiSpreads(unittest.TestCase):
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
 
-        self.app = app
+        self.app = main.get_app()
         self.endpoint = "/spreads"
         self.request = webapp2.Request.blank(self.endpoint)
 

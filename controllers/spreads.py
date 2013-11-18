@@ -7,8 +7,6 @@ import datetime
 import logging
 import webapp2
 
-from google.appengine.ext.webapp.util import run_wsgi_app
-
 from lib.constants import CONSTANTS as c
 from lib.constants import DATA_BLOB as d
 from lib.constants import HTTP_CODE as http_code
@@ -18,7 +16,7 @@ from lib.utils import Utils as utils
 
 from models.spread import SpreadFactory
 
-class MainPage(webapp2.RequestHandler):
+class SpreadsHandler(webapp2.RequestHandler):
     def get(self):
         spread = SpreadFactory().get_instance()
         result = {}
@@ -113,14 +111,3 @@ class MainPage(webapp2.RequestHandler):
 
     def _trim_keys(self, key):
         return key[:-2]
-        
-
-app = webapp2.WSGIApplication([('/spreads', MainPage)],
-                              debug=True)
-
-
-def main():
-    run_wsgi_app(app)
-
-if __name__ == "__main__":
-    main()
