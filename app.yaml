@@ -16,7 +16,7 @@ inbound_services:
 handlers:
 
 - url: /helper/tally
-  script: tally.py
+  script: controllers/tallies.py
   login: admin
 
 - url: /_ah/mail/.+
