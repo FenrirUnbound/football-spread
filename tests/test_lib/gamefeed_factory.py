@@ -5,7 +5,8 @@ class GameFeedFactory():
         function_generator = {
             'PRE': self._preseason_feed,
             'POS': self._postseason_feed,
-            'REG': self._regseason_feed
+            'REG': self._regseason_feed,
+            'TST': self._testseason_feed
         } [data_type]
 
         return function_generator()
@@ -31,5 +32,13 @@ class GameFeedFactory():
             '{"ss":[["Fri","7:00","Final",0,"MIN","16","BUF","20",0,0,"56115",'
             '0,"REG11","2013"],["Fri","8:00","Final",0,"SF","15","KC","13",0,'
             '0,"56116",0,"REG11","2013"]]}')
+
+        return result
+
+    def _testseason_feed(self):
+        result = (
+            '{"ss":[["Fri","8:00","Final",0,"OAK","20","NO","28",0,0,"56117",'
+            '0,"PRE1234","2013"],["Sat","4:30","Pregame",0,"DAL",0,"ARI",0,0,0,'
+            '"56118",0,"PRE1234","2013"]]}')
 
         return result
