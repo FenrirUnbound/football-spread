@@ -24,6 +24,8 @@ from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 class ReceiveMail(InboundMailHandler):
+    __SENDER = ''
+
     """
     """
 
@@ -36,7 +38,7 @@ class ReceiveMail(InboundMailHandler):
         if len(data) > 0:
             spread = SpreadFactory().get_instance()
             spread.save(self._default_week(), data)
-            self._success(message.subject, data)
+            self._success(message.to, message.sender, message.subject, data)
             #self._ping(message.subject, data)
         
     def _parse(self, message):
@@ -263,7 +265,7 @@ class ReceiveMail(InboundMailHandler):
 
         message_ping.send()
 
-    def _success(self, subject, spread_data):
+    def _success(self, email_sender, email_target, subject, spread_data):
         """
         Sends an email
         """
@@ -271,10 +273,10 @@ class ReceiveMail(InboundMailHandler):
             subject = 'OG FOOTBALL LEAGUE'
 
         message_ping = mail.EmailMessage(
-                sender=s.EMAIL_SENDER,
+                sender=email_sender,
                 subject=subject)
 
-        message_ping.to = s.EMAIL_TARGET
+        message_ping.to = email_target
         message_ping.body = """
                             Reclaimer,
 
