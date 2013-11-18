@@ -37,7 +37,7 @@ class TestApiScores(unittest.TestCase):
         # Timestamp in seconds
         self.timestamp = int(datetime.datetime.now().strftime('%s'))
         # An arbitrary and unrealistic week number
-        self.week = (self.timestamp % 1000) + 100
+        self.week = (self.timestamp % 1000) + 500
         # Content for GET requests
         self.content_str = (
             '{"ss":[["Sat","4:30","final overtime",0,"BAL",'
@@ -379,4 +379,50 @@ class TestApiScores(unittest.TestCase):
         self.assertEqual(
             'application/json; charset=utf-8',
             response.headers['Content-Type'])
+
+    def test_week_id_slug(self):
+        self.request = webapp2.Request.blank(
+            self.endpoint + '/' + str(self.week)
+            )
+        response = None
+        result = []
+
+        self.assertTrue(
+            ScoreModel(
+                week = self.week,
+                game_id = self.timestamp
+                ).put(),
+            "Saving to datastore")
+        self.assertEqual(
+            len(ScoreModel().all().fetch(2)),
+            1,
+            "Datastore has exactly 1 entry")
+
+        response = self.request.get_response(self.app)
+
+        self.assertEqual(
+            response.status_int,
+            http_code.OK,
+            "Status code 200 OK")
+        self.assertNotEqual(
+            len(response.body),
+            0,
+            "Response came back non-empty")
+
+        result = json.loads(response.body)
+        self.assertIsNotNone(
+            result,
+            "JSON loaded properly")
+        self.assertEqual(
+            len(result),
+            1,
+            "Response came back with exactly 1 entry")
+        self.assertEqual(
+            result[0]['week'],
+            self.week,
+            "Season week number is correct")
+        self.assertEqual(
+            result[0][d.NFL_GAME_ID],
+            self.timestamp,
+            "NFL game ID matches")
         

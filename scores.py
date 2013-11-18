@@ -20,12 +20,12 @@ from models.score import ScoreFactory
 class MainPage(webapp2.RequestHandler):
     DEBUG = False
 
-    def get(self):
+    def get(self, week_id=0):
         data = {}
         result = []
         score = ScoreFactory().get_instance()
 
-        week_req = self.request.get(
+        week_req = week_id or self.request.get(
             d.GAME_WEEK, 
             default_value=utils.default_week())
         week = (self._validate_params(d.GAME_WEEK, week_req) or
@@ -102,8 +102,12 @@ class MainPage(webapp2.RequestHandler):
         } [conversion_key]
         
 
-app = webapp2.WSGIApplication([('/scores', MainPage)],
-                              debug=True)
+app = webapp2.WSGIApplication(
+    [
+        ('/scores', MainPage),
+        ('/scores/(.*)', MainPage)
+    ],
+    debug=True)
 
 
 def main():
