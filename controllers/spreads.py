@@ -14,66 +14,73 @@ from lib.constants import NFL as nfl
 from lib.constants import PARAM_TYPES as pt
 from lib.utils import Utils as utils
 
-from google.appengine.ext.webapp.util import run_wsgi_app
-from models.score import ScoreFactory
+from models.spread import SpreadFactory
 
-class MainPage(webapp2.RequestHandler):
-    DEBUG = False
+class SpreadsHandler(webapp2.RequestHandler):
+    def get(self):
+        spread = SpreadFactory().get_instance()
+        result = {}
 
-    def get(self, week_id=0):
-        data = {}
-        result = []
-        score = ScoreFactory().get_instance()
-
-        week_req = week_id or self.request.get(
+        week_req = self.request.get(
             d.GAME_WEEK, 
             default_value=utils.default_week())
         week = (self._validate_params(d.GAME_WEEK, week_req) or
                 utils.default_week())
 
-        result = score.fetch(week)
+        result = spread.fetch(week)
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.set_status(http_code.OK)
         self.response.out.write(json.dumps(result, indent = 4))
 
-    def options(self):
-        self.response.headers['Access-Control-Allow-Origin'] = 'http://spread.hellaballer.com'
-        self.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT'
-        self.response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.set_status(http_code.OK)
-
     def post(self):
+        spread = SpreadFactory().get_instance()
         data = {}
         result = {
             "data": 0,
             "Success": "Success",
-            "status_code": 201
-            }
-        score = ScoreFactory().get_instance()
+            "status_code": http_code.CREATED
+        }
         week = utils.default_week()
+        values = []
+        key = ''
 
-        parameters = self.request.POST.items()
-        for item in parameters:
-            value = self._validate_params(item[0], item[1])
-            if value != None:
-                data[item[0]] = value
 
-        if d.NFL_GAME_ID in data:
-            if d.GAME_WEEK in data:
-                week = data[d.GAME_WEEK]
-        
-            result['data'] = score.save(week, [data])
+        for item in self.request.POST.items():
+            values = self.request.POST.getall(item[0])
+            key = item[0]
+
+            # Keys should only be strings
+            if not isinstance(item[0], basestring):
+                try:
+                    key = unicode(item[0])
+                except ValueError:
+                    logging.error("Cannot convert key. Skipping")
+                    continue
+
+            # Trim endings off keys for array objects
+            if key[-2:] == '[]':
+                key = self._trim_keys(key)
+                value = values
+            else:
+                # Can only validate non-list items
+                value = self._validate_params(key, values.pop())
+
+            data[key] = value
+
+        if d.GAME_WEEK in data:
+            week = data[d.GAME_WEEK]
+
+        result["data"] = spread.save(week, [data])
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.headers['Access-Control-Allow-Origin'] = '*'
-        self.response.set_status(result['status_code'])
-        self.response.out.write(json.dumps(result, indent = 4))
+        self.response.set_status(result["status_code"])
+        self.response.out.write(json.dumps(result["data"], indent = 4))
 
     def _validate_params(self, key, value):
-        conversion_key = pt.score.get(key.lower(), "")
+        conversion_key = pt.spread.get(key.lower(), "")
 
         try:
             if isinstance(value, basestring):
@@ -100,18 +107,7 @@ class MainPage(webapp2.RequestHandler):
             "string": "",
             "": None
         } [conversion_key]
-        
-
-app = webapp2.WSGIApplication(
-    [
-        ('/scores', MainPage),
-        ('/scores/(.*)', MainPage)
-    ],
-    debug=True)
 
 
-def main():
-    run_wsgi_app(app)
-
-if __name__ == "__main__":
-    main()
+    def _trim_keys(self, key):
+        return key[:-2]
