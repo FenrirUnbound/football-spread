@@ -5,7 +5,7 @@ from controllers import scores, spreads
 from google.appengine.ext.webapp import util
 
 def main():
-    appplication = get_app()
+    application = get_app()
 
     util.run_wsgi_app(application)
 
