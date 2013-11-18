@@ -214,9 +214,11 @@ class _ScoreDatastore(Score):
 
         scores = self.__query_scores(week)
         for game in scores:
-            # Reject data if any of it is stale
-            if game.timestamp <= stale_timestamp:
-                return []
+            # Only check for staleness when dealing with current games
+            if week%100 >= utils.default_week():
+                # Reject data if any of it is stale
+                if game.timestamp <= stale_timestamp:
+                    return []
 
             result.append( {
                 d.AWAY_NAME: game.away_name,
