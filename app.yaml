@@ -20,7 +20,7 @@ handlers:
   login: admin
 
 - url: /_ah/mail/.+
-  script: mail.py
+  script: controllers/mails.py
   login: admin
 
 - url: /favicon\.ico
