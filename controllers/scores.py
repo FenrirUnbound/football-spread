@@ -14,10 +14,9 @@ from lib.constants import NFL as nfl
 from lib.constants import PARAM_TYPES as pt
 from lib.utils import Utils as utils
 
-from google.appengine.ext.webapp.util import run_wsgi_app
 from models.score import ScoreFactory
 
-class MainPage(webapp2.RequestHandler):
+class ScoresHandler(webapp2.RequestHandler):
     DEBUG = False
 
     def get(self, week_id=0):
@@ -100,18 +99,3 @@ class MainPage(webapp2.RequestHandler):
             "string": "",
             "": None
         } [conversion_key]
-        
-
-app = webapp2.WSGIApplication(
-    [
-        ('/scores', MainPage),
-        ('/scores/(.*)', MainPage)
-    ],
-    debug=True)
-
-
-def main():
-    run_wsgi_app(app)
-
-if __name__ == "__main__":
-    main()

@@ -6,8 +6,9 @@ import json
 import unittest
 import webapp2
 
+import main
 from models.score import ScoreModel
-from scores import app
+
 from lib.constants import DATA_BLOB as d
 from lib.constants import HTTP_CODE as http_code
 from lib.constants import NFL as nfl
@@ -29,7 +30,7 @@ class TestApiScores(unittest.TestCase):
         self.fetch_mock = UrlFetchMock()
         self.testbed._register_stub(testbed.URLFETCH_SERVICE_NAME, self.fetch_mock)
 
-        self.app = app
+        self.app = main.get_app()
         # Define the endpoint for all our requests
         self.endpoint = "/scores"
         # Define the base request
