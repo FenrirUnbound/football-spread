@@ -39,6 +39,8 @@ class Formatter(object):
         raise NotImplementedError("Subclasses should implement this")
 
 class _FormatMapper(Formatter):
+    __TEST_WEEK_THRESHOLD = 100
+
     """
     This is a terminating decorator
     """
@@ -82,6 +84,8 @@ class _FormatMapper(Formatter):
             else:
                 # Regular or Preseason
                 week = ''.join(i for i in game[sb.REG_GAME_TAG] if i.isdigit())
+                week = int(week) or 0
+                week_prefix = week_prefix if week < _FormatMapper.__TEST_WEEK_THRESHOLD else 0
 
                 result.append( {
                     d.AWAY_NAME: game[sb.REG_AWAY_NAME] or "",
@@ -92,7 +96,7 @@ class _FormatMapper(Formatter):
                     d.GAME_STATUS: game[sb.REG_GAME_STATUS] or "",
                     d.GAME_TAG: game[sb.REG_GAME_TAG] or "",
                     d.GAME_TIME: game[sb.REG_GAME_TIME] or "",
-                    d.GAME_WEEK: (int(week) or 0) + week_prefix,
+                    d.GAME_WEEK: week + week_prefix,
                     d.HOME_NAME: game[sb.REG_HOME_NAME] or "",
                     d.HOME_SCORE: int(game[sb.REG_HOME_SCORE]) or 0,
                     d.NFL_GAME_ID: int(game[sb.REG_NFL_GAME_ID]) or 0

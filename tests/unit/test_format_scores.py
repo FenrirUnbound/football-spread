@@ -362,3 +362,52 @@ class TestFormatMapper(unittest.TestCase):
             self.assertListEqual(result, [], 'Formatter returns an empty list')
         except JSONDecodeError:
             self.fail('JSONDecodeError not caught')
+
+    def test_format_test_season(self):
+        self.input_str = self.data_generator.generate_data(data_type='TST')
+
+        self.input_answer = [
+            {
+                d.AWAY_NAME: "OAK",
+                d.AWAY_SCORE: 20,
+                d.GAME_CLOCK: "",
+                d.GAME_DAY: "Fri",
+                d.GAME_SEASON: 2013,
+                d.GAME_STATUS: "Final",
+                d.GAME_TAG: "PRE1234",
+                d.GAME_TIME: "8:00",
+                d.GAME_WEEK: 1234,
+                d.HOME_NAME: "NO",
+                d.HOME_SCORE: 28,
+                d.NFL_GAME_ID: 56117
+            },
+            {
+                d.AWAY_NAME: "DAL",
+                d.AWAY_SCORE: 0,
+                d.GAME_CLOCK: "",
+                d.GAME_DAY: "Sat",
+                d.GAME_SEASON: 2013,
+                d.GAME_STATUS: "Pregame",
+                d.GAME_TAG: "PRE1234",
+                d.GAME_TIME: "4:30",
+                d.GAME_WEEK: 1234,
+                d.HOME_NAME: "ARI",
+                d.HOME_SCORE: 0,
+                d.NFL_GAME_ID: 56118
+            }
+        ]
+
+        result = self.formatter.format(self.input_str)
+        self.assertIsNotNone(
+            result,
+            "Formatter succeeded")
+        self.assertListEqual(
+            result,
+            self.input_answer,
+            'Formater returned the correct list')
+        for (index, item) in enumerate(result):
+            self.assertDictEqual(
+                item,
+                self.input_answer[index],
+                'Formatter created the correct dict (' + str(index) + ')'
+                )
