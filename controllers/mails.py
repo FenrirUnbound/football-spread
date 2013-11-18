@@ -12,7 +12,6 @@ from lxml.html.clean import Cleaner
 from collections import deque
 
 from lib.constants import NFL as nfl
-from lib.secrets import SECRETS as s
 
 from google.appengine.api import mail
 from google.appengine.ext import webapp
