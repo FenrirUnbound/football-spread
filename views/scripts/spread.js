@@ -138,6 +138,8 @@ spread = (function ($, scores_) {
                 scoreDiff = current[AWAY_SCORE] - current[HOME_SCORE] + spreadLine ;
             }
 
+            favorite = (favorite === 'ARI') ? 'AZ' : favorite;
+
             // Omit all Pregame game status
             if(current[GAME_STATUS] !== 'Pregame')
                 gameStatus = current[GAME_STATUS];
