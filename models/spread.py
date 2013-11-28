@@ -178,7 +178,7 @@ class _SpreadDatastore(Spread):
         return query.fetch(nfl.TOTAL_TEAMS)
 
     def __is_same(self, spread_model, spread_dict):
-        if spread_model.week == spread_dict[d.GAME_WEEK]:
+        if (spread_model.week % 100) == (spread_dict[d.GAME_WEEK] % 100):
             return spread_model.owner == spread_dict[sd.SPREAD_OWNER]
 
 class _SpreadFilter(Spread):
