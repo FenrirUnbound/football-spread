@@ -37,7 +37,10 @@ class ReceiveMail(InboundMailHandler):
             spread_data = self._parse_for_spread_data(message)
             player_picks = self._map_data_to_dict(spread_data)
 
-            result = self._convert_to_id_table(player_picks)
+            #result = self._convert_to_id_table(player_picks)
+
+            for name, pick in self._convert_to_id_table(player_picks).iteritems():
+                result.append(self._convert_to_spread_object(name, pick))
         except:
             result = {
                 'error': 'An error was received :('
@@ -212,6 +215,19 @@ class ReceiveMail(InboundMailHandler):
         condition = lambda x: x.text != None and len(x.text.strip()) > 0 and '/' not in x.text and '-' not in x.text
 
         return [transform(x) for x in row if condition(x)]
+
+
+    def _convert_to_spread_object(self, owner_name, spread_data):
+        result = {
+            'year': nfl.YEAR,
+            'week': self._default_week(),
+            'owner': owner_name
+        }
+
+        for game_id, picks in spread_data.iteritems():
+            result[game_id] = picks
+
+        return result
 
 
     def _success(self, email_sender, email_target, subject, spread_data):
