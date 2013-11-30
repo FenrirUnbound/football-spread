@@ -31,7 +31,7 @@ class ReceiveMail(InboundMailHandler):
         """Event that is fired upon receiving an email
 
         """
-        result = {}
+        result = []
 
         try:
             spread_data = self._parse_for_spread_data(message)
