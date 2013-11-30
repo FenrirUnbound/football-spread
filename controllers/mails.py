@@ -10,6 +10,7 @@ from lxml import html
 from lxml.html.clean import Cleaner
 from collections import deque
 
+from lib.constants import NFL as nfl
 from lib.utils import Utils as utils
 
 from google.appengine.api import mail
@@ -37,19 +38,17 @@ class ReceiveMail(InboundMailHandler):
             spread_data = self._parse_for_spread_data(message)
             player_picks = self._map_data_to_dict(spread_data)
 
-            #result = self._convert_to_id_table(player_picks)
-
             for name, pick in self._convert_to_id_table(player_picks).iteritems():
                 result.append(self._convert_to_spread_object(name, pick))
-        except:
-            result = {
-                'error': 'An error was received :('
-            }
+        except Exception, e:
+            logging.error(e)
+            result = [e]
 
         if len(result) > 0:
             spread = SpreadFactory().get_instance()
             spread.save(utils.default_week(), result)
             self._success(message.to, message.sender, message.subject, result)
+            #self._debug_message(message.to, message.sender, message.subject, result)
 
         
     def _parse_for_spread_data(self, message):
@@ -220,7 +219,7 @@ class ReceiveMail(InboundMailHandler):
     def _convert_to_spread_object(self, owner_name, spread_data):
         result = {
             'year': nfl.YEAR,
-            'week': self._default_week(),
+            'week': utils.default_week(),
             'owner': owner_name
         }
 
@@ -250,6 +249,22 @@ class ReceiveMail(InboundMailHandler):
 
                             -- Arbiter
                             """
+
+        message_ping.send()
+
+    def _debug_message(self, email_sender, email_target, subject, spread_data):
+        """
+        Sends an email
+        """
+        if subject == None or len(subject) == 0:
+            subject = 'OG FOOTBALL LEAGUE'
+
+        message_ping = mail.EmailMessage(
+                sender=email_sender,
+                subject=subject)
+
+        message_ping.to = email_target
+        message_ping.body = json.dumps(spread_data, indent=4)
 
         message_ping.send()
 
