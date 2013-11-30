@@ -101,6 +101,7 @@ class ReceiveMail(InboundMailHandler):
         for page in spread_data:
             width = 0
             current = {}
+            current_players = []
 
             for row in page:
                 working = deque(row)
@@ -117,13 +118,14 @@ class ReceiveMail(InboundMailHandler):
                         # Guard against placeholder columns
                         if 'X' != name and 'x' != name:
                             current[name] = []
+                            current_players.append(name)
                             width += 1
                 else:
                     while len(working) > width:
                         # remove extraneous data from right-end of row
                         working.pop()
 
-                    for player in current:
+                    for player in current_players:
                         current[player].append(working.popleft())
 
             # combine current with final result
