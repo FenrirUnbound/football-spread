@@ -32,7 +32,10 @@ class ReceiveMail(InboundMailHandler):
         """Event that is fired upon receiving an email
 
         """
-        data = self._parse(message)
+        try:
+            data = self._parse(message)
+        except:
+            data = ['Error', 'received',  ':(']
 
         if len(data) > 0:
             self._success(message.to, message.sender, message.subject, data)
