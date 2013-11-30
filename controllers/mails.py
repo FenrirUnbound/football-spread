@@ -16,6 +16,7 @@ from google.appengine.api import mail
 from google.appengine.ext import webapp
 
 from models.score import ScoreFactory
+from models.spread import SpreadFactory
 
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler 
 from google.appengine.ext.webapp.util import run_wsgi_app
