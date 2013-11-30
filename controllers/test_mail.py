@@ -2,7 +2,6 @@
 
 import datetime
 import string
-import email
 import logging
 try: import simplejson as json
 except ImportError: import json
@@ -11,13 +10,12 @@ from lxml import html
 from lxml.html.clean import Cleaner
 from collections import deque
 
-from lib.constants import NFL as nfl
+from lib.utils import Utils as utils
 
 from google.appengine.api import mail
 from google.appengine.ext import webapp
 
 from models.score import ScoreFactory
-from models.spread import SpreadFactory
 
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler 
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -32,16 +30,25 @@ class ReceiveMail(InboundMailHandler):
         """Event that is fired upon receiving an email
 
         """
-        try:
-            data = self._parse(message)
-        except:
-            data = ['Error', 'received',  ':(']
+        result = {}
 
-        if len(data) > 0:
-            self._success(message.to, message.sender, message.subject, data)
-            #self._ping(message.subject, data)
+        try:
+            spread_data = self._parse_for_spread_data(message)
+            player_picks = self._map_data_to_dict(spread_data)
+
+            result = self._convert_to_id_table(player_picks)
+        except:
+            result = {
+                'error': 'An error was received :('
+            }
+
+        if len(result) > 0:
+            spread = SpreadFactory().get_instance()
+            spread.save(utils.default_week(), result)
+            self._success(message.to, message.sender, message.subject, result)
+
         
-    def _parse(self, message):
+    def _parse_for_spread_data(self, message):
         htmltext = message.bodies('text/html')
         tree = None
         tables = None
@@ -65,65 +72,62 @@ class ReceiveMail(InboundMailHandler):
                 for row in cleaner.clean_html(page):
                     cell_row_data = self._extract_elements_from_tr(row)
 
-                    if len(cell_row_data) > 2:
-                        spread_data.append(cell_row_data)
-                    elif len(cell_row_data) > 0 and 'DEFAULT' in cell_row_data[0]:
-                        spread_data.append(cell_row_data)
-                    elif len(spread_data) > 0 and 'page' in cell_row_data[0]:
-                        # Came across a new page within the same table
-                        # Treat it like we're at the end of a page
-                        result.append(spread_data)
-                        spread_data = []
+                    if len(cell_row_data) > 1:
+                        if 'DEFAULT PICK' in cell_row_data[0] or 'POINTS' in cell_row_data[0]:
+                            # no one cares about season meta-data
+                            pass
+                        elif 'Name' in cell_row_data[0] and len(spread_data) > 0:
+                            # Came across a new page
+                            result.append(spread_data)
+
+                            # Reset the spread_data before saving to it again
+                            spread_data = []
+                            spread_data.append(cell_row_data)
+                        else:
+                            spread_data.append(cell_row_data)
+
+
+                result.append(spread_data)
+                spread_data = []
 
         return result
 
-
-
-    def _organize_spread_data_page(self, spread_data):
-        LABEL = {
-            "HEADER": 'Name'
-        }
-        header = []
-        width = 0
+    def _map_data_to_dict(self, spread_data):
         result = {}
-        working = deque(spread_data)
 
-        # Drop miscellaneous "Page" data
-        try:
-            if working[0] is not None and working[0][0] is not None:
-                if 'page' in working[0][0]:
+        for page in spread_data:
+            width = 0
+            current = {}
+
+            for row in page:
+                working = deque(row)
+
+                # Check if working with header
+                if 'Name' in working[0]:
+                    #drop meta-header
                     working.popleft()
-        except IndexError:
-            logging.error('IndexError')
-            logging.error(working)
-            return result
-        
-        # header is always the first line
-        header = working.popleft()[1:]
-        # Initialize dict
-        for name in header:
-            result[name] = []
-            width += 1
 
-        # Remove the 3 rows of season-long header information
-        #    Info includes last week's points & total season points
-        # XXX: assumes the header information is constant
-        for i in range(0,3):
-            working.popleft()
+                    # Save header data as keys
+                    while len(working) > 0:
+                        name = working.popleft()
 
-        for row in working:
-            if len(row) < width:
-                continue
+                        # Guard against placeholder columns
+                        if 'X' != name and 'x' != name:
+                            current[name] = []
+                            width += 1
+                else:
+                    while len(working) > width:
+                        # remove extraneous data from right-end of row
+                        working.pop()
 
-            current = deque(row)
-            # Shift the extraneous data
-            while len(current) > width:
-                current.popleft()
+                    for player in current:
+                        current[player].append(working.popleft())
 
-            for name in header:
-                result[name].append(current.popleft())
+            # combine current with final result
+            result.update(current)
 
         return result
+
 
     def _convert_to_id_table(self, player_picks):
         mapping = self._get_game_ids_map()
@@ -178,8 +182,7 @@ class ReceiveMail(InboundMailHandler):
 
     def _get_game_ids_map(self):
         score_factory = ScoreFactory().get_instance(depth=4)
-        scores = score_factory.fetch(self._default_week())
-        #inital_map = dict((v,k) for k,v in nfl.TEAM_NAME.iteritems())
+        scores = score_factory.fetch(utils.default_week())
         result = {}
 
         for game in scores:
@@ -187,10 +190,12 @@ class ReceiveMail(InboundMailHandler):
             result[game['away_name']] = game['game_id']
 
         # Workaround for arizona
+        # TODO: in wrong place; should trust source of truth
         if 'ARI' in result:
             result['AZ'] = result['ARI']
 
         return result
+
 
     def _filter_and_transform_to_tree(self, html_string):
         # Filter out newlines, tabs, return carriages, and '*' characters
@@ -200,61 +205,13 @@ class ReceiveMail(InboundMailHandler):
         # Load html tree & grab the tables
         return html.fromstring(stripped)
 
+
     def _extract_elements_from_tr(self, row):
         transform = lambda x: x.text.strip()
         condition = lambda x: x.text != None and len(x.text.strip()) > 0 and '/' not in x.text and '-' not in x.text
 
         return [transform(x) for x in row if condition(x)]
 
-    def _convert_to_spread_object(self, owner_name, spread_data):
-        result = {
-            'year': nfl.YEAR,
-            'week': self._default_week(),
-            'owner': owner_name
-        }
-
-        for game_id, picks in spread_data.iteritems():
-            result[game_id] = picks
-
-        return result
-
-    def _default_week(self):
-        time_delta = datetime.datetime.now() - nfl.WEEK_ONE[nfl.YEAR]
-        current_week = (time_delta.days/7)+1
-
-        if current_week <= 0:
-            # Preseason
-            time_delta = datetime.datetime.now() - nfl.PRE_WEEK_ONE[nfl.YEAR]
-            current_week = (time_delta.days/7)+1
-        elif current_week > 17:
-            current_week = current_week
-        else:
-            current_week = current_week
-
-        return current_week
-
-    def _ping(self, subject, spread_data):
-        """
-        Sends an email
-        """
-        if subject == None or len(subject) == 0:
-            subject = 'OG FOOTBALL LEAGUE'
-
-        message_ping = mail.EmailMessage(
-                sender=s.EMAIL_SENDER,
-                subject=subject)
-
-        message_ping.to = s.EMAIL_TARGET
-        message_ping.body = """
-                            Reclaimer,
-
-                            This is our response to your challenge.
-
-                            """
-        message_ping.body += json.dumps(spread_data, indent = 4)
-        message_ping.body += "\n\n" + '-- Arbiter'
-
-        message_ping.send()
 
     def _success(self, email_sender, email_target, subject, spread_data):
         """
