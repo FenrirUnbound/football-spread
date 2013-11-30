@@ -20,6 +20,10 @@ handlers:
   script: controllers/tallies.py
   login: admin
 
+- url: /_ah/mail/test@.*matsumoto26sunday\.appspotmail\.com
+  script: controllers/test_mail.py
+  login: admin
+
 - url: /_ah/mail/.+
   script: controllers/mails.py
   login: admin
