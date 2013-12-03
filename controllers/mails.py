@@ -167,13 +167,11 @@ class ReceiveMail(InboundMailHandler):
                         game_id = unicode(mapping[item[0]])
                     except KeyError:
                         logging.error('KeyError during mapping')
+                        if len(item) > 0:
+                            logging.error(item[0])
                         logging.error(player_name)
                         logging.error(player_picks)
 
-                        self._ping('Error Received', {
-                                "Player Name": player_name,
-                                "Player Picks": picks
-                            });
 
                         # Bail from error
                         return []
