@@ -328,7 +328,7 @@ class _ScoreSource(Score):
             """
             NOTE: 'week' is for checking for postseason data
             """
-            is_postseason = False
+            is_postseason = week > nfl.WEEKS_IN_REG
             scores = {}
             result = []
             status_code = 0
