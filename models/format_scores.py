@@ -65,7 +65,7 @@ class _FormatMapper(Formatter):
             week_prefix = nfl.WEEK_PREFIX[game_tag]
 
             # Check if post-season
-            if "POS" == game_tag:
+            if "POS" == game_tag or "PRO" == game_tag:
                 week = ''.join(i for i in game[sb.POST_GAME_TAG] if i.isdigit())
                 result.append( {
                     d.AWAY_NAME: game[sb.POST_AWAY_NAME] or "",
