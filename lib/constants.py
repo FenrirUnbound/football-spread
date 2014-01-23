@@ -85,7 +85,8 @@ class NFL():
     WEEK_PREFIX = {
         "PRE": 100,
         "REG": 200,
-        "POS": 300
+        "POS": 300,
+        "PRO": 300
     }
     YEAR = 2013
 
