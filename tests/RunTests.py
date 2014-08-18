@@ -45,4 +45,4 @@ if __name__ == '__main__':
         SDK_PATH = args[0]
         TEST_PATH = args[1]
     main(SDK_PATH, TEST_PATHS)
-    js_test()
+    #js_test()
