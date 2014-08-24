@@ -125,7 +125,7 @@ class TestScoreMemcache(unittest.TestCase):
         data = self.factory.generate_data(
             timestamp=self.timestamp,
             week=self.week)
-        tag = "SCORES_S2013W" + unicode(self.week)
+        tag = "SCORES_S2014W" + unicode(self.week)
         result = {}
 
         result = self.score_memcache.fetch(self.week)
@@ -155,8 +155,8 @@ class TestScoreMemcache(unittest.TestCase):
         result = 0
         result_dict = {}
         result_str = ""
-        tag = "SCORES_S2013W" + unicode(self.week)
-        
+        tag = "SCORES_S2014W" + unicode(self.week)
+
         result = self.score_memcache.save(self.week, data)
         self.assertEqual(
             result,
@@ -176,7 +176,7 @@ class TestScoreMemcache(unittest.TestCase):
 
 
     def test_tag_creation(self):
-        tag = "SCORES_S2013W" + unicode(self.week)
+        tag = "SCORES_S2014W" + unicode(self.week)
 
         result_str = self.score_memcache._ScoreMemcache__tag(self.week)
         self.assertEqual(
@@ -207,8 +207,8 @@ class TestScoreMemcache(unittest.TestCase):
         result = 0
         result_dict = {}
         result_str = ""
-        tag = "SCORES_S2013W" + unicode(self.week)
-        
+        tag = "SCORES_S2014W" + unicode(self.week)
+
         result = self.score_memcache.save(self.week, data)
         self.assertEqual(
             result,
@@ -234,7 +234,7 @@ class TestScoreMemcache(unittest.TestCase):
         result = 0
         result_dict = {}
         result_str = ""
-        tag = "SCORES_S2013W" + unicode(self.week)
+        tag = "SCORES_S2014W" + unicode(self.week)
         update_data = {}
 
         result = self.score_memcache.save(self.week, [data])
@@ -383,8 +383,8 @@ class TestScoreMemcache(unittest.TestCase):
             "Correct number of elements saved")
 
         update_data[d.HOME_SCORE] += 14
-        result = self.score_memcache._ScoreMemcache__sync_with_scores( 
-            self.week, 
+        result = self.score_memcache._ScoreMemcache__sync_with_scores(
+            self.week,
             [update_data])
 
         self.assertIsNotNone(
@@ -421,7 +421,7 @@ class TestScoreMemcache(unittest.TestCase):
         result_str = ""
         spread_margin = data[d.SPREAD_MARGIN]
         spread_odds = data[d.SPREAD_ODDS]
-        tag = "SCORES_S2013W" + unicode(self.week)
+        tag = "SCORES_S2014W" + unicode(self.week)
         update_data = {}
 
         # Remove fields to be added during this test
@@ -858,7 +858,7 @@ class TestScoreFilter(unittest.TestCase):
     class TestMockScore(Score):
         def __init__(self, test_data):
             self.test_data = test_data
-            super(TestScoreFilter.TestMockScore, self).__init__()  
+            super(TestScoreFilter.TestMockScore, self).__init__()
 
         def _fetch_score(self, week):
             #self.test_data['unit_test'].assertEqual(self.test_data['expected_week'],week,'week matches')
