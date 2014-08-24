@@ -131,7 +131,7 @@ class TestSpreadMemcache(unittest.TestCase):
         """
         data = DataBlobFactory().generate_data(
             timestamp=self.timestamp, type="spread")
-        tag = "SPREAD_S2013W" + unicode(self.week)
+        tag = "SPREAD_S2014W" + unicode(self.week)
 
         self.assertTrue(
             memcache.add(tag, json.dumps(data)),
@@ -154,7 +154,7 @@ class TestSpreadMemcache(unittest.TestCase):
                     unicode(item) + " is equal")
 
     def test_tag_creation(self):
-        tag = u"SPREAD_S2013W" + unicode(self.week)
+        tag = u"SPREAD_S2014W" + unicode(self.week)
 
         result_str = self.spread_memcache._SpreadMemcache__tag(self.week)
         self.assertEqual(
@@ -312,7 +312,7 @@ class TestSpreadDatastore(unittest.TestCase):
             self.assertTrue(key in result, 'Result has key "' + key + '"')
             self.assertEqual(
                 test_data[key],
-                result[key], 
+                result[key],
                 'Value for key "' + key + '" matches')
 
     def test_basic_save(self):
@@ -425,7 +425,7 @@ class TestSpreadFilter(unittest.TestCase):
     class TestMockSpread(Spread):
         def __init__(self, test_data):
             self.test_data = test_data
-            super(TestSpreadFilter.TestMockSpread, self).__init__()  
+            super(TestSpreadFilter.TestMockSpread, self).__init__()
 
         def _fetch_spread(self, week):
             #self.test_data['unit_test'].assertEqual(self.test_data['expected_week'],week,'week matches')

@@ -83,7 +83,7 @@ class TestDataBlob(unittest.TestCase):
             db.HOME_SCORE,
             "home_score")
         self.assertEqual(
-            db.NFL_GAME_ID, 
+            db.NFL_GAME_ID,
             "game_id")
         self.assertFalse(
             hasattr(db, "MISC_PICKS"))
@@ -224,16 +224,16 @@ class TestNfl(unittest.TestCase):
             17)
         self.assertEqual(
             n.YEAR,
-            2013)
+            2014)
         self.assertEqual(
             n.WEEK_ONE[n.YEAR],
-            datetime.datetime(2013, 9, 3, 9, 0, 0))
+            datetime.datetime(2014, 9, 2, 9, 0, 0))
         self.assertEqual(
-            n.WEEK_PREFIX['PRE'], 
-            100, 
+            n.WEEK_PREFIX['PRE'],
+            100,
             'Prefix value for pre-season games')
         self.assertEqual(
-            n.WEEK_PREFIX['REG'], 
+            n.WEEK_PREFIX['REG'],
             200,
             'Prefix value for regular season games')
         self.assertEqual(

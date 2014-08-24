@@ -41,7 +41,8 @@ class HTTP_CODE():
 class NFL():
     DEFAULT_WEEK = 0
     PRE_WEEK_ONE = {
-        2013: datetime.datetime(2013, 8, 6, 0, 0, 0)
+        2013: datetime.datetime(2013, 8, 6, 0, 0, 0),
+        2014: datetime.datetime(2014, 8, 7, 0, 0, 0)
     }
     TEAM_NAME = {
         "ARIZONA": "ARI",
@@ -80,7 +81,8 @@ class NFL():
     TOTAL_TEAMS = 32
     WEEKS_IN_REG = 17
     WEEK_ONE = {
-        2013: datetime.datetime(2013, 9, 3, 9, 0, 0)
+        2013: datetime.datetime(2013, 9, 3, 9, 0, 0),
+        2014: datetime.datetime(2014, 9, 2, 9, 0, 0)
     }
     WEEK_PREFIX = {
         "PRE": 100,
@@ -88,7 +90,7 @@ class NFL():
         "POS": 300,
         "PRO": 300
     }
-    YEAR = 2013
+    YEAR = 2014
 
 
 class PARAM_TYPES():

@@ -36,7 +36,7 @@ class TestScoreFactory(unittest.TestCase):
         self.factory = DataBlobFactory()
         self.timestamp = int(datetime.datetime.now().strftime('%s'))
         self.week = self.timestamp  % 50 + 50
-        self.tag = "SCORES_S2013W" + unicode(self.week)
+        self.tag = "SCORES_S2014W" + unicode(self.week)
 
     def tearDown(self):
         self.testbed.deactivate()
@@ -110,7 +110,7 @@ class TestScoreFactory(unittest.TestCase):
 
     def test_fetch_memcache_data(self):
         """
-        Validate that we can fetch data from memcache. 
+        Validate that we can fetch data from memcache.
         Datastore should not be affected by this
         """
         data = self.factory.generate_data(
