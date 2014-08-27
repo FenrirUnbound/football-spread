@@ -33,7 +33,7 @@ class ScoreModel(db.Model):
     spread_margin = db.FloatProperty(default=0.000)
     timestamp = db.DateTimeProperty(auto_now=True)
 
-class ScoreFactory():    
+class ScoreFactory():
     def get_instance(self, depth=4):
         instance = self.__create_instance(depth)
 
@@ -48,7 +48,7 @@ class ScoreFactory():
             return _ScoreMemcache(_ScoreDatastore(None))
         elif depth == 3:
             return _ScoreMemcache(_ScoreDatastore(_ScoreSource(None)))
-        
+
         return _ScoreFilter(_ScoreMemcache(_ScoreDatastore(_ScoreSource(None))))
 
 class Score(object):
@@ -106,7 +106,7 @@ class _ScoreMemcache(Score):
             if len(query) > 0:
                 data = json.loads(query)
                 now = self.__timestamp()
-            
+
                 # Check if data is fresh enough to be valid
                 if (now - data['timestamp']) < _ScoreMemcache.__THRESHOLD:
                     return data['data']
@@ -128,8 +128,8 @@ class _ScoreMemcache(Score):
         valid_keys = []
 
         status = memcache.set(
-            tag, 
-            json.dumps(save, ensure_ascii=False), 
+            tag,
+            json.dumps(save, ensure_ascii=False),
             _ScoreMemcache.__THRESHOLD)
 
         if status:
@@ -207,7 +207,7 @@ class _ScoreDatastore(Score):
 
     def _fetch_score(self, week):
         stale_timestamp = (
-            datetime.datetime.utcnow() - 
+            datetime.datetime.utcnow() -
             datetime.timedelta(seconds=_ScoreDatastore.__THRESHOLD))
         scores = []
         result = []
@@ -311,9 +311,13 @@ class _ScoreDatastore(Score):
     def __query_scores(self, week):
         query = None
 
-        query = ScoreModel.all().filter("week =", week).order("-game_id")
+        query = db.GqlQuery('SELECT * FROM ScoreModel ' +
+                            'WHERE week = :1 ' +
+                            'ORDER BY game_id DESC',
+                            week)
 
-        return query.fetch(nfl.TOTAL_TEAMS)
+        return query.run(limit=nfl.TOTAL_TEAMS)
+
 
 class _ScoreSource(Score):
     def __init__(self, nextScore=None):
@@ -367,7 +371,7 @@ class _ScoreSource(Score):
 
 class _ScoreFilter(Score):
     def __init__(self, nextScore=None):
-        super(_ScoreFilter, self).__init__(nextScore=nextScore)  
+        super(_ScoreFilter, self).__init__(nextScore=nextScore)
 
     def fetch(self, week):
         """
@@ -392,7 +396,7 @@ class _ScoreFilter(Score):
 
         if week < nfl.WEEK_PREFIX['PRE']:
             week += self.__week_offset()
-        
+
         if self.next != None:
             result = self.next.save(week, data)
 
