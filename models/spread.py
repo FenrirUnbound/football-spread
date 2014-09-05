@@ -144,32 +144,63 @@ class _SpreadDatastore(Spread):
         current_data = data
         saved = False
 
-        for data_item in data:
-            if query != None:
-                # Making an update to data instead of fresh save
-                for game in query:
-                    # Have to check the entire query list for a matching game
-                    if self.__is_same(game, data_item):
-                        for element in data_item:
-                            setattr(
-                                game, 
-                                element, 
-                                data_item[element] or getattr(game, element))
+        if query != None:  # updates needed
+            spreads = self.__spread_to_dict(query)
 
-                        game.put()
-                        counter += 1
-                        saved = True
+            for item in current_data:
+                owner = item[sd.SPREAD_OWNER]
 
-            if not saved:
-                data_item[d.GAME_WEEK] = week
-                SpreadModel(**data_item).put()
+                if owner in spreads:  #update
+                    current_spread = spreads[owner]
+                    updated_spread = self.__merge_datasets(current_spread, item)
+
+                    updated_spread.put()
+                    counter += 1
+                else:  #new
+                    item[d.GAME_WEEK] = week
+                    SpreadModel(**item).put()
+
+                    counter += 1
+        else:  # only new items
+            for item in current_data:
+                item[d.GAME_WEEK] = week
+                SpreadModel(**item).put()
 
                 counter += 1
-                saved = True
-
-            saved = False
 
         return counter
+
+
+    def __spread_to_dict(self, spreads):
+        """ Create a dictionary of spread models, using the owner as the key
+
+        arguments:
+        spreads -- list of SpreadModel data
+        """
+        result = {}
+
+        for item in spreads:
+            owner = item.owner
+            result[owner] = item
+
+        return result
+
+
+    def __merge_datasets(self, model, data):
+        """Merges a given DB Model and an equivalent dict
+
+        Note: This does mutate model. This is to guarantee that the db object updates and does not
+        create another entity/row.
+
+        arguments:
+        model -- the actual SpreadModel data
+        data -- the dict equivalent of SpreadModel data
+        """
+        for element in data:
+            setattr(model, element, data[element] or getattr(model, element))
+
+        return model
+
 
     def __query_spread(self, week):
         query = db.GqlQuery('SELECT * FROM SpreadModel ' +
@@ -179,9 +210,6 @@ class _SpreadDatastore(Spread):
 
         return query.run(limit=nfl.TOTAL_TEAMS)
 
-    def __is_same(self, spread_model, spread_dict):
-        if (spread_model.week % 100) == (spread_dict[d.GAME_WEEK] % 100):
-            return spread_model.owner == spread_dict[sd.SPREAD_OWNER]
 
 class _SpreadFilter(Spread):
     def __init__(self, nextSpread=None):
