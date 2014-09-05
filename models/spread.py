@@ -72,7 +72,7 @@ class _SpreadMemcache(Spread):
             if len(query) > 0:
                 data = json.loads(query)
                 now = self.__timestamp()
-            
+
                 # Check if data is fresh enough to be valid
                 if (now - data["timestamp"]) < c.MEMCACHE_THRESHOLD:
                     if isinstance(data["data"], list):
@@ -172,10 +172,12 @@ class _SpreadDatastore(Spread):
         return counter
 
     def __query_spread(self, week):
-        query = SpreadModel().all()
-        query = query.filter("week = ", week).order(sd.SPREAD_OWNER)
+        query = db.GqlQuery('SELECT * FROM SpreadModel ' +
+                            'WHERE week = :1 ' +
+                            'ORDER BY game_id DESC',
+                            week)
 
-        return query.fetch(nfl.TOTAL_TEAMS)
+        return query.run(limit=nfl.TOTAL_TEAMS)
 
     def __is_same(self, spread_model, spread_dict):
         if (spread_model.week % 100) == (spread_dict[d.GAME_WEEK] % 100):
