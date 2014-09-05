@@ -33,7 +33,7 @@ class ScoreModel(db.Model):
     spread_margin = db.FloatProperty(default=0.000)
     timestamp = db.DateTimeProperty(auto_now=True)
 
-class ScoreFactory():    
+class ScoreFactory():
     def get_instance(self, depth=4):
         instance = self.__create_instance(depth)
 
@@ -48,7 +48,7 @@ class ScoreFactory():
             return _ScoreMemcache(_ScoreDatastore(None))
         elif depth == 3:
             return _ScoreMemcache(_ScoreDatastore(_ScoreSource(None)))
-        
+
         return _ScoreFilter(_ScoreMemcache(_ScoreDatastore(_ScoreSource(None))))
 
 class Score(object):
@@ -106,7 +106,7 @@ class _ScoreMemcache(Score):
             if len(query) > 0:
                 data = json.loads(query)
                 now = self.__timestamp()
-            
+
                 # Check if data is fresh enough to be valid
                 if (now - data['timestamp']) < _ScoreMemcache.__THRESHOLD:
                     return data['data']
@@ -128,8 +128,8 @@ class _ScoreMemcache(Score):
         valid_keys = []
 
         status = memcache.set(
-            tag, 
-            json.dumps(save, ensure_ascii=False), 
+            tag,
+            json.dumps(save, ensure_ascii=False),
             _ScoreMemcache.__THRESHOLD)
 
         if status:
@@ -207,7 +207,7 @@ class _ScoreDatastore(Score):
 
     def _fetch_score(self, week):
         stale_timestamp = (
-            datetime.datetime.utcnow() - 
+            datetime.datetime.utcnow() -
             datetime.timedelta(seconds=_ScoreDatastore.__THRESHOLD))
         scores = []
         result = []
@@ -261,43 +261,66 @@ class _ScoreDatastore(Score):
         current_data = data
         saved = False
 
-        for (index, item) in reversed(list(enumerate(data))):
-            if query != None:
-                for game in query:
-                    if self.__is_same(game, item):
-                        game.away_name = item[d.AWAY_NAME] if d.AWAY_NAME in item else game.away_name
-                        game.away_score = item[d.AWAY_SCORE] if d.AWAY_SCORE in item else game.away_score
-                        game.game_clock = item[d.GAME_CLOCK] if d.GAME_CLOCK in item else game.game_clock
-                        game.game_day = item[d.GAME_DAY] if d.GAME_DAY in item else game.game_day
-                        game.game_id = item[d.NFL_GAME_ID] if d.NFL_GAME_ID in item else game.game_id
-                        game.game_status = (item[d.GAME_STATUS] if d.GAME_STATUS in item else game.game_status)
-                        game.game_tag = item[d.GAME_TAG] if d.GAME_TAG in item else game.game_tag
-                        game.game_time = item[d.GAME_TIME] if d.GAME_TIME in item else game.game_time
-                        game.home_name = item[d.HOME_NAME] if d.HOME_NAME in item else game.home_name
-                        game.home_score = item[d.HOME_SCORE] if d.HOME_SCORE in item else game.home_score
-                        game.week = item[d.GAME_WEEK] if d.GAME_WEEK in item else game.week
-                        game.year = item[d.GAME_SEASON] if d.GAME_SEASON in item else game.year
-                        game.spread_margin = (item[d.SPREAD_MARGIN] if d.SPREAD_MARGIN in item else game.spread_margin)
-                        game.spread_odds = (item[d.SPREAD_ODDS] if d.SPREAD_ODDS in item else game.spread_odds)
+        if query != None:
+            scores = self.__scores_to_dict(query)
 
-                        # Propogate spread data
-                        item[d.SPREAD_MARGIN] = game.spread_margin
-                        item[d.SPREAD_ODDS] = game.spread_odds
+            for item in data:
+                game_id = item[d.NFL_GAME_ID]
 
-                        game.put()
-                        counter += 1
-                        saved = True
+                if game_id in scores:
+                    game = scores[game_id]
+                    updated_game = self.__merge_datasets(game, item)
 
-            if not saved:
+                    # Propogate spread data, since datastore is Source of Truth for spread data
+                    # TODO: chck if this hack is needed anymore
+                    item[d.SPREAD_MARGIN] = game.spread_margin
+                    item[d.SPREAD_ODDS] = game.spread_odds
+
+                    updated_game.put()
+                    counter += 1
+                else:
+                    # new to the data set
+                    item[d.GAME_WEEK] = week
+                    ScoreModel(**item).put()
+
+                    counter += 1
+        else:
+            for item in data:
                 item[d.GAME_WEEK] = week
                 ScoreModel(**item).put()
 
                 counter += 1
-                saved = True
-
-            saved = False
 
         return counter
+
+
+    def __merge_datasets(self, model, data):
+        """Merges a given DB Model and an equivalent dict
+
+        Note: This does mutate model. This is to guarantee that the db object updates and does not
+        create another entity/row.
+
+        arguments:
+        model -- the actual ScoreModel data
+        data -- the dict equivalent of ScoreModel data
+        """
+        model.away_name = data[d.AWAY_NAME] if d.AWAY_NAME in data else model.away_name
+        model.away_score = data[d.AWAY_SCORE] if d.AWAY_SCORE in data else model.away_score
+        model.game_clock = data[d.GAME_CLOCK] if d.GAME_CLOCK in data else model.game_clock
+        model.game_day = data[d.GAME_DAY] if d.GAME_DAY in data else model.game_day
+        model.game_id = data[d.NFL_GAME_ID] if d.NFL_GAME_ID in data else model.game_id
+        model.game_status = (data[d.GAME_STATUS] if d.GAME_STATUS in data else model.game_status)
+        model.game_tag = data[d.GAME_TAG] if d.GAME_TAG in data else model.game_tag
+        model.game_time = data[d.GAME_TIME] if d.GAME_TIME in data else model.game_time
+        model.home_name = data[d.HOME_NAME] if d.HOME_NAME in data else model.home_name
+        model.home_score = data[d.HOME_SCORE] if d.HOME_SCORE in data else model.home_score
+        model.week = data[d.GAME_WEEK] if d.GAME_WEEK in data else model.week
+        model.year = data[d.GAME_SEASON] if d.GAME_SEASON in data else model.year
+        model.spread_margin = data[d.SPREAD_MARGIN] if d.SPREAD_MARGIN in data else model.spread_margin
+        model.spread_odds = data[d.SPREAD_ODDS] if d.SPREAD_ODDS in data else model.spread_odds
+
+        return model
+
 
     def __is_same(self, game_model, game_dict):
         if game_model.game_id == game_dict[d.NFL_GAME_ID]:
@@ -308,12 +331,29 @@ class _ScoreDatastore(Score):
 
         return False
 
+
+    def __scores_to_dict(self, scores):
+        """ Creates a list of score models into a dict, using the game_id as the key
+
+        arguments:
+        scores -- list of ScoreModel data
+        """
+        result = {}
+
+        for game in scores:
+            game_id = game.game_id
+            result[game_id] = game
+
+        return result
+
     def __query_scores(self, week):
-        query = None
+        query = db.GqlQuery('SELECT * FROM ScoreModel ' +
+                            'WHERE week = :1 ' +
+                            'ORDER BY game_id DESC',
+                            week)
 
-        query = ScoreModel.all().filter("week =", week).order("-game_id")
+        return query.run(limit=nfl.TOTAL_TEAMS)
 
-        return query.fetch(nfl.TOTAL_TEAMS)
 
 class _ScoreSource(Score):
     def __init__(self, nextScore=None):
@@ -367,7 +407,7 @@ class _ScoreSource(Score):
 
 class _ScoreFilter(Score):
     def __init__(self, nextScore=None):
-        super(_ScoreFilter, self).__init__(nextScore=nextScore)  
+        super(_ScoreFilter, self).__init__(nextScore=nextScore)
 
     def fetch(self, week):
         """
@@ -392,7 +432,7 @@ class _ScoreFilter(Score):
 
         if week < nfl.WEEK_PREFIX['PRE']:
             week += self.__week_offset()
-        
+
         if self.next != None:
             result = self.next.save(week, data)
 
