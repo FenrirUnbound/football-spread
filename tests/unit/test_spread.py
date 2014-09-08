@@ -421,6 +421,41 @@ class TestSpreadDatastore(unittest.TestCase):
     def test_update_replacement(self):
         pass
 
+    def test_different_years(self):
+        test_comparison = self.factory.generate_data(week=self.week, type='spread')
+        test_data = [
+            self.factory.generate_data(week=self.week, type='spread'),
+            test_comparison
+            ]
+        old_owner = 'Protoman'
+        result_arr = []
+        result = {}
+
+        test_data[0][sd.SPREAD_OWNER] = old_owner
+        test_data[0]['year'] = 2013
+
+        for item in test_data:
+            SpreadModel(**item).put()
+
+        result_arr = self.datastore.fetch(self.week)
+
+        self.assertIsNotNone(
+            result_arr,
+            "Datastore got us a result")
+        self.assertEqual(
+            len(result_arr),
+            1,
+            "Only 1 item in the datastore")
+
+        result = result_arr[0]
+        for key in test_comparison:
+            self.assertTrue(key in result, 'Result has key "' + key + '"')
+            self.assertEqual(
+                test_comparison[key],
+                result[key],
+                'Value for key "' + key + '" matches')
+
+
 class TestSpreadFilter(unittest.TestCase):
     class TestMockSpread(Spread):
         def __init__(self, test_data):

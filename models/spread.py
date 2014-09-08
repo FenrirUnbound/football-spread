@@ -208,8 +208,9 @@ class _SpreadDatastore(Spread):
 
     def __query_spread(self, week):
         query = db.GqlQuery('SELECT * FROM SpreadModel ' +
-                            'WHERE week = :1 ' +
+                            'WHERE year = :1 AND week = :2 ' +
                             'ORDER BY owner DESC',
+                            nfl.YEAR,
                             week)
         return query.run(limit=nfl.TOTAL_TEAMS)
 
