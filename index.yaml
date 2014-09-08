@@ -30,3 +30,4 @@ indexes:
   properties:
   - name: week
   - name: owner
+  - name: year
