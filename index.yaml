@@ -31,3 +31,4 @@ indexes:
   - name: week
   - name: owner
   - name: year
+    direction: desc
