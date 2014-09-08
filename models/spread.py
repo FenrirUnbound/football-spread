@@ -148,6 +148,10 @@ class _SpreadDatastore(Spread):
             spreads = self.__spread_to_dict(query)
 
             for item in current_data:
+                # ensure item is not empty
+                if len(item) == 0:
+                    continue
+
                 owner = item[sd.SPREAD_OWNER]
 
                 if owner in spreads:  #update
@@ -205,9 +209,8 @@ class _SpreadDatastore(Spread):
     def __query_spread(self, week):
         query = db.GqlQuery('SELECT * FROM SpreadModel ' +
                             'WHERE week = :1 ' +
-                            'ORDER BY game_id DESC',
+                            'ORDER BY owner DESC',
                             week)
-
         return query.run(limit=nfl.TOTAL_TEAMS)
 
 
