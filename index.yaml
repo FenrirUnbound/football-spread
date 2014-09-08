@@ -29,13 +29,6 @@ indexes:
 - kind: SpreadModel
   properties:
   - name: week
-  - name: owner
-  - name: year
-    direction: desc
-
-- kind: SpreadModel
-  properties:
-  - name: week
   - name: year
   - name: owner
     direction: desc
