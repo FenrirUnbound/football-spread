@@ -6,6 +6,8 @@ VERBOSE = true
 def execute_command(command)
   puts(command)
   system(command)
+
+  $?.exitstatus
 end
 
 file 'venv/bin/activate' do
