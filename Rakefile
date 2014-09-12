@@ -24,7 +24,13 @@ end
 task :clean do
   execute_command('find . -name "*.pyc" -exec rm -rf {} \;')
   FileUtils.rm_rf('venv', :verbose => VERBOSE) if Dir.exists?('venv')
-  FileUtils.rm_rf('google_appengine', :verbose => VERBOSE) if Dir.exists?('google_appengine')
+
+  if File.symlink?('google_appengine')
+    FileUtils.rm('google_appengine')
+  elsif Dir.exists?('google_appengine')
+    FileUtils.rm_rf('google_appengine')
+  end
+
   FileUtils.rm("#{FILENAME}", :verbose => VERBOSE) if File.exists?("#{FILENAME}")
 end
 
