@@ -3,7 +3,4 @@ python:
   - "2.7"
 notifications:
   email: false
-before_script:
-  - wget http://googleappengine.googlecode.com/files/google_appengine_1.8.7.zip -nv
-  - unzip -q google_appengine_1.8.7.zip
-script: PYTHONPATH=. ./tests/RunTests.py "./google_appengine"
+script: make build
