@@ -39,3 +39,4 @@ nosetests.xml
 lib/my_user.*
 lib/secrets.py*
 venv/*
+cover/*
