@@ -1,15 +1,13 @@
 import json
 import webapp2
 
-class StatusPage(webapp2.RequestHandler):
-    def get(self):
-        result = { 'status': 'OK'}
+from controllers.v1 import status
+from webapp2_extras import routes
 
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.headers['Access-Control-Allow-Origin'] = '*'
-        self.response.write(json.dumps(result, indent = 4))
 
 
 application = webapp2.WSGIApplication([
-        ('/api/v1/status', StatusPage)
+        routes.PathPrefixRoute('/api/v1', [
+            webapp2.Route('/status', status.StatusPage)
+        ])
     ], debug=True)
