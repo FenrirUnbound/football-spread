@@ -8,6 +8,8 @@ threadsafe: false
 libraries:
 - name: lxml
   version: "2.3"
+- name: webapp2
+  version: latest
 
 
 inbound_services:
@@ -27,6 +29,9 @@ handlers:
 - url: /favicon\.ico
   static_files: static/images/favicon.ico
   upload: static/images/favicon\.ico
+
+- url: /api/v1/.*
+  script: main_v1.application
 
 - url: .*
   script: main.py
