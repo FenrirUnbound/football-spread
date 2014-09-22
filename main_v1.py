@@ -1,6 +1,8 @@
 import json
 import webapp2
 
+from webapp2_extras import routes
+
 class StatusPage(webapp2.RequestHandler):
     def get(self):
         result = { 'status': 'OK'}
@@ -11,5 +13,7 @@ class StatusPage(webapp2.RequestHandler):
 
 
 application = webapp2.WSGIApplication([
-        ('/api/v1/status', StatusPage)
+        routes.PathPrefixRoute('/api/v1', [
+            webapp2.Route('/status', StatusPage)
+        ])
     ], debug=True)
