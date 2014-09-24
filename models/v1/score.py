@@ -1,9 +1,9 @@
 from google.appengine.ext import ndb
 
 class _ScoreModel(ndb.Model):
-    away = ndb.StringProperty()
+    away_team = ndb.StringProperty()
     game_id = ndb.IntegerProperty(required=True)
-    home = ndb.StringProperty()
+    home_team = ndb.StringProperty()
     week = ndb.IntegerProperty(required=True)
     year = ndb.IntegerProperty(required=True)
 
