@@ -27,7 +27,7 @@ class TestScoresAPI(unittest.TestCase):
 
     def test_specific_year_and_week(self):
         """
-        GET the latest scores
+        GET the group of game scores of a specific year and week
         """
         test_week = 2
         test_year = 2015

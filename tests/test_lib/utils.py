@@ -7,9 +7,13 @@ import webapp2
 
 class TestRequest(object):
     def __init__(self):
+        # 'setUp' is chosen to appease constructor; it does nothing except get us asserts
         self.test = TestCase(methodName='setUp')
 
     def get_request(self, endpoint):
+        """
+        Perform a HTTP GET request against a given endpoint in the application
+        """
         request = webapp2.Request.blank(endpoint)
         response = request.get_response(main.application)
 
