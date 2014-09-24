@@ -1,13 +1,9 @@
 from __future__ import unicode_literals
 
 
-import json
-import main_v1 as main
 from test_lib.test_game_factory import TestGameFactory
 from test_lib.utils import TestRequest
-from models.v1.score import _ScoreModel as ScoreModel
 import unittest
-import webapp2
 
 
 from google.appengine.ext import testbed
