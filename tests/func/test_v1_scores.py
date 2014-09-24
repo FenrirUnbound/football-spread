@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import json
 import main_v1 as main
 from test_lib.test_game_factory import TestGameFactory
+from test_lib.utils import TestRequest
 from models.v1.score import _ScoreModel as ScoreModel
 import unittest
 import webapp2
@@ -19,6 +20,7 @@ class TestScoresAPI(unittest.TestCase):
         self.testbed.init_memcache_stub()
         self.testbed.init_datastore_v3_stub()
         self.data_generator = TestGameFactory()
+        self.request = TestRequest()
 
     def tearDown(self):
         self.testbed.deactivate()
@@ -38,15 +40,7 @@ class TestScoresAPI(unittest.TestCase):
         for item in test_data:
             item.put()
 
-        request = webapp2.Request.blank("/api/v1/scores/year/" + unicode(test_year) + "/week/" + unicode(test_week))
-        response = request.get_response(main.application)
-
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.headers["Content-Type"], "application/json")
-        self.assertEqual(response.headers["Access-Control-Allow-Origin"], "*")
-
-        body = json.loads(response.body)
+        body = self.request.get_request("/api/v1/scores/year/" + unicode(test_year) + "/week/" + unicode(test_week))
         self.assertEqual(len(body), 1, "Response has 1 element: " + unicode(len(body)))
 
         check = body[0]
