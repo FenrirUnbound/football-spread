@@ -12,6 +12,9 @@ class Score(object):
         self.next = nextScore
 
     def get(self, year, week):
+        """
+        Fetch the games of a specific year and week
+        """
         key = self.generate_key(year, week)
         query = _ScoreModel.query(ancestor=key)
 
@@ -19,4 +22,7 @@ class Score(object):
         return query.fetch(25)
 
     def generate_key(self, year, week):
+        """
+        Generate the correct NDB entity key based on the year and week
+        """
         return ndb.Key('year', year, 'week', week)
