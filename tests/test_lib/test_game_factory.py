@@ -17,7 +17,6 @@ class TestGameFactory(object):
             game_id=int(generated_game_id)
             )
 
-        print result.parent()
         return result
 
     def __random_game_id(self):
