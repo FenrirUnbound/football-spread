@@ -39,13 +39,13 @@ task :clean do
   FileUtils.rm("#{FILENAME}", :verbose => VERBOSE) if File.exists?("#{FILENAME}")
 end
 
-task :test do
-  execute_command('PYTHONPATH="." ./tests/RunTests.py')
-end
-
 task :venv => ['requirements.txt', 'venv/bin/activate'] do
   execute_command('. venv/bin/activate; pip install -Ur requirements.txt')
   FileUtils.touch('venv/bin/activate', :verbose => VERBOSE)
+end
+
+task :test => [:venv] do
+  execute_command('. venv/bin/activate; PYTHONPATH="." ./tests/RunTests.py')
 end
 
 task :build => [:venv, 'google_appengine'] do
