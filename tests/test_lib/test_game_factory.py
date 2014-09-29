@@ -11,7 +11,10 @@ class TestGameFactory(object):
         parent_key = ndb.Key('year', year, 'week', week)
         generated_game_id = self.__random_game_id()
 
+        print type(parent_key)
+        print isinstance(parent_key, ndb.Key)
         result = ScoreModel(
+            parent=parent_key,
             week=week,
             year=year,
             game_i_d=generated_game_id,
