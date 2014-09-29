@@ -23,6 +23,9 @@ file 'google_appengine' do
   end
 end
 
+task :all => [:clean, :test] do
+end
+
 task :clean do
   execute_command('find . -name "*.pyc" -exec rm -rf {} \;')
   FileUtils.rm_rf('venv', :verbose => VERBOSE) if Dir.exists?('venv')
@@ -36,7 +39,7 @@ task :clean do
   FileUtils.rm("#{FILENAME}", :verbose => VERBOSE) if File.exists?("#{FILENAME}")
 end
 
-task :test => [:clean] do
+task :test do
   execute_command('PYTHONPATH="." ./tests/RunTests.py')
 end
 
