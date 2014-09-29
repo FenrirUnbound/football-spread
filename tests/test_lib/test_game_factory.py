@@ -8,9 +8,9 @@ from google.appengine.ext import ndb
 
 class TestGameFactory(object):
     def generate_data(self, year=1999, week=0):
-        key = ndb.Key("year", year, "week", week)
+        parent_key = ndb.Key("year", year, "week", week)
         return ScoreModel(
-            parent=key,
+            parent=parent_key,
             week=week,
             year=year,
             game_id=self.__random_game_id()
