@@ -14,9 +14,9 @@ class TestApiStatus(unittest.TestCase):
         response = request.get_response(main.application)
         body = ""
 
-        self.assertEqual(response.status_code, 200, "Status code 200 OK")
-        self.assertEqual(response.headers["Content-Type"], "application/json", "content type is JSON")
-        self.assertEqual(response.headers["Access-Control-Allow-Origin"], "*", "Allowed access control is all")
+        self.assertEqual(response.status_int, 200)
+        self.assertEqual(response.headers["Content-Type"], "application/json")
+        self.assertEqual(response.headers["Access-Control-Allow-Origin"], "*")
 
         body = json.loads(response.body)
         self.assertEqual(body, {"status":"OK"})
