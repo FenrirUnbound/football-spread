@@ -12,9 +12,11 @@ class TestGameFactory(object):
         generated_game_id = self.__random_game_id()
 
         result = ScoreModel(
-            week=int(week),
-            year=int(year),
-            game_id=int(generated_game_id)
+            week=week,
+            year=year,
+            game_i_d=generated_game_id,
+            away_team="away",
+            home_team="home"
             )
 
         return result
