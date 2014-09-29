@@ -23,6 +23,9 @@ file 'google_appengine' do
   end
 end
 
+task :all => [:clean, :test] do
+end
+
 task :clean do
   execute_command('find . -name "*.pyc" -exec rm -rf {} \;')
   FileUtils.rm_rf('venv', :verbose => VERBOSE) if Dir.exists?('venv')
@@ -36,13 +39,13 @@ task :clean do
   FileUtils.rm("#{FILENAME}", :verbose => VERBOSE) if File.exists?("#{FILENAME}")
 end
 
-task :test => [:clean] do
-  execute_command('PYTHONPATH="." ./tests/RunTests.py')
-end
-
 task :venv => ['requirements.txt', 'venv/bin/activate'] do
   execute_command('. venv/bin/activate; pip install -Ur requirements.txt')
   FileUtils.touch('venv/bin/activate', :verbose => VERBOSE)
+end
+
+task :test => [:venv] do
+  execute_command('. venv/bin/activate; PYTHONPATH="." ./tests/RunTests.py')
 end
 
 task :build => [:venv, 'google_appengine'] do

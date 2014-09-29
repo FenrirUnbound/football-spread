@@ -2,3 +2,4 @@ simplejson >= 3.6
 nosegae >= 0.2
 coverage >= 3.7
 google-api-python-client >= 1.2
+mock >= 1.0
