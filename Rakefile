@@ -49,5 +49,6 @@ task :test => [:venv] do
 end
 
 task :build => [:venv, 'google_appengine'] do
-  execute_command('. venv/bin/activate; PYTHONPATH=./tests/ nosetests --with-xunit --with-coverage --cover-html --cover-erase --with-gae --gae-lib-root=google_appengine ./tests/func/ ./tests/unit/ ./tests/test_lib/')
+  exit_status = execute_command('. venv/bin/activate; PYTHONPATH=./tests/ nosetests --with-xunit --with-coverage --cover-html --cover-erase --with-gae --gae-lib-root=google_appengine ./tests/func/ ./tests/unit/ ./tests/test_lib/')
+  puts exit_status
 end

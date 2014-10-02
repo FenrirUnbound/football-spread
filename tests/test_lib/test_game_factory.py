@@ -3,12 +3,11 @@ from __future__ import unicode_literals
 import random
 from models.v1.score import _ScoreModel as ScoreModel
 
-
 from google.appengine.ext import ndb
 
 class TestGameFactory(object):
     def generate_data(self, year=1999, week=0):
-        parent_key = ndb.Key('year', year)
+        parent_key = ndb.Key(parent=ndb.Key('year', year))
         generated_game_id = self.__random_game_id()
 
         print type(parent_key)
