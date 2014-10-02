@@ -8,8 +8,7 @@ from google.appengine.ext import ndb
 
 class TestGameFactory(object):
     def generate_data(self, year=1999, week=0):
-        # parent_key = ndb.Key('year', year, 'week', week)
-        parent_key = ndb.Key(pairs=[('year', year), ('week', week)])
+        parent_key = ndb.Key('year', year)
         generated_game_id = self.__random_game_id()
 
         print type(parent_key)
