@@ -1,4 +1,4 @@
-FILENAME = 'google_appengine_1.9.12.zip'
+FILENAME = 'google_appengine_1.9.15.zip'
 SDK_SRC = "https://storage.googleapis.com/appengine-sdks/featured/#{FILENAME}"
 CLOUDBEES_SRC = '/opt/google/gae_python_sdk/1.8.latest/'
 VERBOSE = true
