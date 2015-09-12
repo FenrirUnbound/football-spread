@@ -224,10 +224,10 @@ class TestNfl(unittest.TestCase):
             17)
         self.assertEqual(
             n.YEAR,
-            2014)
+            2015)
         self.assertEqual(
             n.WEEK_ONE[n.YEAR],
-            datetime.datetime(2014, 9, 2, 9, 0, 0))
+            datetime.datetime(2015, 9, 8, 9, 0, 0))
         self.assertEqual(
             n.WEEK_PREFIX['PRE'],
             100,
@@ -428,4 +428,3 @@ class TestSpreadDataBlob(unittest.TestCase):
         self.assertEqual(
             sd.SPREAD_WINNER,
             "spread_winner")
-
