@@ -42,7 +42,8 @@ class NFL():
     DEFAULT_WEEK = 0
     PRE_WEEK_ONE = {
         2013: datetime.datetime(2013, 8, 6, 0, 0, 0),
-        2014: datetime.datetime(2014, 8, 7, 0, 0, 0)
+        2014: datetime.datetime(2014, 8, 7, 0, 0, 0),
+        2015: datetime.datetime(2015, 8, 4, 0, 0, 0)
     }
     TEAM_NAME = {
         "ARIZONA": "ARI",
@@ -82,7 +83,8 @@ class NFL():
     WEEKS_IN_REG = 17
     WEEK_ONE = {
         2013: datetime.datetime(2013, 9, 3, 9, 0, 0),
-        2014: datetime.datetime(2014, 9, 2, 9, 0, 0)
+        2014: datetime.datetime(2014, 9, 2, 9, 0, 0),
+        2015: datetime.datetime(2015, 9, 8, 9, 0, 0)
     }
     WEEK_PREFIX = {
         "PRE": 100,
@@ -90,7 +92,7 @@ class NFL():
         "POS": 300,
         "PRO": 300
     }
-    YEAR = 2014
+    YEAR = 2015
 
 
 class PARAM_TYPES():
