@@ -224,10 +224,10 @@ class TestNfl(unittest.TestCase):
             17)
         self.assertEqual(
             n.YEAR,
-            2015)
+            2016)
         self.assertEqual(
             n.WEEK_ONE[n.YEAR],
-            datetime.datetime(2015, 9, 8, 9, 0, 0))
+            datetime.datetime(2016, 9, 6, 9, 0, 0))
         self.assertEqual(
             n.WEEK_PREFIX['PRE'],
             100,

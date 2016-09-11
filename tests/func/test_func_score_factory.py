@@ -36,7 +36,7 @@ class TestScoreFactory(unittest.TestCase):
         self.factory = DataBlobFactory()
         self.timestamp = int(datetime.datetime.now().strftime('%s'))
         self.week = self.timestamp  % 50 + 50
-        self.tag = "SCORES_S2015W" + unicode(self.week)
+        self.tag = "SCORES_S2016W" + unicode(self.week)
 
     def tearDown(self):
         self.testbed.deactivate()

@@ -131,7 +131,7 @@ class TestSpreadMemcache(unittest.TestCase):
         """
         data = DataBlobFactory().generate_data(
             timestamp=self.timestamp, type="spread")
-        tag = "SPREAD_S2015W" + unicode(self.week)
+        tag = "SPREAD_S2016W" + unicode(self.week)
 
         self.assertTrue(
             memcache.add(tag, json.dumps(data)),
@@ -154,7 +154,7 @@ class TestSpreadMemcache(unittest.TestCase):
                     unicode(item) + " is equal")
 
     def test_tag_creation(self):
-        tag = u"SPREAD_S2015W" + unicode(self.week)
+        tag = u"SPREAD_S2016W" + unicode(self.week)
 
         result_str = self.spread_memcache._SpreadMemcache__tag(self.week)
         self.assertEqual(
