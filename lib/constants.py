@@ -61,8 +61,9 @@ class NFL():
         "GREEN BAY": "GB",
         "HOUSTON": "HOU",
         "INDIANAPOLIS": "IND",
-        "JACKSONVILLE": "JAC",
+        "JACKSONVILLE": "JAX",
         "KANSAS CITY": "KC",
+        "LOS ANGELES": "LA",
         "MIAMI": "MIA",
         "MINNESOTA": "MIN",
         "NEW ENGLAND": "NE",
@@ -75,7 +76,6 @@ class NFL():
         "SAN DIEGO": "SD",
         "SAN FRANCISCO": "SF",
         "SEATTLE": "SEA",
-        "ST. LOUIS": "STL",
         "TAMPA BAY": "TB",
         "TENNESSEE": "TEN",
         "WASHINGTON": "WAS"
