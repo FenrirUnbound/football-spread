@@ -28,8 +28,9 @@ admin = (function($) {
     "GB": "GREEN BAY",
     "HOU": "HOUSTON",
     "IND": "INDIANAPOLIS",
-    "JAC": "JACKSONVILLE",
+    "JAX": "JACKSONVILLE",
     "KC": "KANSAS CITY",
+    "LA": "LOS ANGELES",
     "MIA": "MIAMI",
     "MIN": "MINNESOTA",
     "NE": "NEW ENGLAND",
@@ -42,7 +43,6 @@ admin = (function($) {
     "SD": "SAN DIEGO",
     "SF": "SAN FRANCISCO",
     "SEA": "SEATTLE",
-    "STL": "ST. LOUIS",
     "TB": "TAMPA BAY",
     "TEN": "TENNESSEE",
     "WAS": "WASHINGTON"
