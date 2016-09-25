@@ -46,6 +46,8 @@ class ReceiveMail(InboundMailHandler):
 
         if len(result) > 0:
             spread = SpreadFactory().get_instance()
+            logging.info('result')
+            logging.info(result)
             spread.save(utils.default_week(), result)
             self._success(message.to, message.sender, message.subject, result)
             #self._debug_message(message.to, message.sender, message.subject, result)

@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import datetime
 import json
+import logging
 
 from google.appengine.api import memcache
 from google.appengine.ext import db
@@ -148,6 +149,7 @@ class _SpreadDatastore(Spread):
             spreads = self.__spread_to_dict(query)
 
             for item in current_data:
+                logging.info(item)
                 # ensure item is not empty
                 if len(item) == 0:
                     continue
